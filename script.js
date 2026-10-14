@@ -15,8 +15,6 @@ function generateQR() {
 
   qrCodeInstance = new QRCode(qrContainer, {
     text: url,
-    width: 200,
-    height: 200,
     colorDark: "#000000",
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.H,
@@ -27,6 +25,7 @@ function generateQR() {
     const qrImg = qrContainer.querySelector("img");
     if (qrImg && qrImg.src) {
       downloadBtn.style.display = "block";
+      downloadBtn.style.margin = "15px auto 0 auto";
     }
   }, 100);
 }
