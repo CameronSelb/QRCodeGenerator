@@ -26,7 +26,7 @@ function generateQR() {
     correctLevel: QRCode.CorrectLevel.H,
   });
 
-  // Use a tiny timeout to ensure the library has finished creating the img element inside the DOM
+
   setTimeout(() => {
     const qrImg = qrContainer.querySelector("img");
     if (qrImg && qrImg.src) {
@@ -64,12 +64,10 @@ async function downloadQR() {
     }
   }
 
-  // Create a temporary hidden link element
   const downloadLink = document.createElement("a");
   downloadLink.href = qrImg.src;
-  downloadLink.download = "qrcode.png"; // Default name for the saved file
+  downloadLink.download = "qrcode.png";
 
-  // Trigger the download programmatically
   document.body.appendChild(downloadLink);
   downloadLink.click();
   document.body.removeChild(downloadLink);
