@@ -1,13 +1,19 @@
 let qrCodeInstance = null;
 
 function generateQR() {
-  const url = document.getElementById("urlInput").value.trim();
+  let url = document.getElementById("urlInput").value.trim();
   const qrContainer = document.getElementById("qrcode");
   const downloadBtn = document.getElementById("downloadBtn");
 
   if (!url) {
     alert("Please enter a valid link!");
     return;
+  }
+
+  const pattern = /^https?/
+
+  if (!pattern.test(url)) {
+    url = "https://" +  url
   }
 
   qrContainer.innerHTML = "";
@@ -30,14 +36,32 @@ function generateQR() {
   }, 100);
 }
 
-// Function to handle downloading the generated image
-function downloadQR() {
+async function downloadQR() {
+  const isMobile = window.matchMedia("(pointer: coarse)").matches;
   const qrContainer = document.getElementById("qrcode");
   const qrImg = qrContainer.querySelector("img");
 
   if (!qrImg || !qrImg.src) {
     alert("No QR code found to download!");
     return;
+  }
+
+   if (navigator.canShare && navigator.share && isMobile) {
+    try {
+      const response = await fetch(qrImg.src);
+      const blob = await response.blob();
+
+      const file = new File([blob], "qrcode.png", { type: blob.type });
+
+      await navigator.share({
+        files: [file],
+        title: "My QR Code",
+        text: "Scan or save this QR code"
+      });
+      return;
+    } catch (error) {
+      console.log("Share failed or was canceled:", error);
+    }
   }
 
   // Create a temporary hidden link element
